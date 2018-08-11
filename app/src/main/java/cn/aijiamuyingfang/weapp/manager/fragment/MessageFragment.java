@@ -30,7 +30,10 @@ import io.reactivex.Observable;
 public class MessageFragment extends RefreshableBaseFragment<UserMessage, GetMessagesListResponse> {
 
     @BindView(R.id.toolbar)
-    WeToolBar mToolbar;
+    WeToolBar mToolBar;
+
+    private int mCurrPage; // 当前页
+    private int mTotalPage; // 总页数
     private UserMessageControllerApi userMessageControllerApi = new UserMessageControllerClient();
 
     @NonNull
@@ -59,8 +62,9 @@ public class MessageFragment extends RefreshableBaseFragment<UserMessage, GetMes
 
     @Override
     public void customRecyclerView() {
-        mToolbar.setTitle("消息");
-        mToolbar.getRightButton().setOnClickListener(v -> {
+        mToolBar.setTitle("消息");
+        mToolBar.setRightButtonText("添加");
+        mToolBar.getRightButton().setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), MessageActionActivity.class);
             MessageFragment.this.startActivity(intent);
         });
@@ -68,11 +72,31 @@ public class MessageFragment extends RefreshableBaseFragment<UserMessage, GetMes
 
     @Override
     protected Observable<ResponseBean<GetMessagesListResponse>> customGetData(int mCurrPage, int mPageSize) {
-        return userMessageControllerApi.getUserMessageList(CommonApp.getApplication().getUserToken(), "system", mCurrPage, mPageSize);
+        return userMessageControllerApi.getUserMessageList(CommonApp.getApplication().getUserToken(), CommonApp.getApplication().getUserId(), mCurrPage, mPageSize);
     }
 
     @Override
     protected List<UserMessage> customBeforeServerData() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public int getCurrentPage() {
+        return mCurrPage;
+    }
+
+    @Override
+    public void setCurrentPage(int currentpage) {
+        this.mCurrPage = currentpage;
+    }
+
+    @Override
+    public int getTotalPage() {
+        return this.mTotalPage;
+    }
+
+    @Override
+    public void setTotalPage(int totalpage) {
+        this.mTotalPage = totalpage;
     }
 }

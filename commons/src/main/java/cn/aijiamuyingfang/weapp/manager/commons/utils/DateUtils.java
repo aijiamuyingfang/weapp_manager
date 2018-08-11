@@ -11,6 +11,8 @@ import java.util.Locale;
 
 
 public final class DateUtils {
+    private static final String TAG = DateUtils.class.getName();
+
     private DateUtils() {
     }
 
@@ -56,6 +58,9 @@ public final class DateUtils {
      * @return
      */
     public static String date2String(Date date, String format) {
+        if (null == date) {
+            return "";
+        }
         if (null == format) {
             // default format
             format = YMD_HMS_FORMAT;
@@ -78,7 +83,7 @@ public final class DateUtils {
         try {
             result = inputDf.parse(date);
         } catch (ParseException e) {
-            Log.e(e.toString(), e.toString());
+            Log.e(TAG, e.toString());
         }
         return result;
     }
