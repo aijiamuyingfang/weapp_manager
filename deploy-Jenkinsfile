@@ -11,14 +11,14 @@ pipeline {
         
         stage('get code') {
             steps {
-                git 'https://github.com/fuyoushengwu/weapp_sender.git'
+                git 'https://github.com/fuyoushengwu/weapp_manager.git'
             }
         }
 
         stage('package') {
             steps {
                 sh 'chmod +x gradlew'
-                sh './gradlew clean build'
+                sh './gradlew clean build  --stacktrace'
             }
         }
 		
